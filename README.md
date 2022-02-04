@@ -2,7 +2,11 @@
 
 ## Project Creation
 
-dotnet new blazorwasm -f net5.0 --hosted true --pwa true -o Blazor.WithGraphics
+This project was created using the Windows Powershell, using the command:
+
+>dotnet new blazorwasm -f net5.0 --hosted true --pwa true -o Blazor.WithGraphics
+
+which sets the .NET 5.0 framework, configuration with HTTPS, Hosted ASP.NET Core and Progressive Web Application and where -o indicates the name of the project folder
 
 ## Components
 
