@@ -1,0 +1,69 @@
+﻿@page "/fetchcustomer"
+@using Blazor.WithGraphics.Shared
+@inject HttpClient Http
+@inject Blazor.WithGraphics.Shared.Models.ICustomerService customerService
+
+<h1>Customers</h1>
+
+<p>This component demonstrates fetching customers from the server.</p>
+
+@if (customers == null)
+{
+    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+}
+else
+{
+<MudTable Elevation="25" Items="GetCustomers()" Filter="new Func<Customer, bool>(Search)" @bind-customer="customer" Hover="true" Breakpoint="Breakpoint.Sm">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Customers</MudText>
+        <MudTextField @bind-Value="searchString" Placeholder="Search for Customers..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>First Name</MudTh>
+        <MudTh>Last Name</MudTh>
+        <MudTh>Phone Number</MudTh>
+        <MudTh>Actions</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="FirstName">@context.FirstName</MudTd>
+        <MudTd DataLabel="LastName">@context.LastName</MudTd>
+        <MudTd DataLabel="PhoneNumber">@context.PhoneNumber</MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager PageSizeOptions="pageSizeOptions" />
+    </PagerContent>
+</MudTable>
+}
+
+@code {
+    private string searchString = "";
+    private Customer customer = new Customer();
+    private List<Customer> customers = new();
+    private int[] pageSizeOptions = new int[] { 5, 10, 15 };
+
+    protected override async Task OnInitializedAsync()
+    {
+        GetCustomers();
+    }
+
+    private List<Customer> GetCustomers()
+    {
+        customers = customerService.GetCustomers();
+        return customers;
+    }
+
+    private bool Search(Customer customer)
+    {
+        if (string.IsNullOrWhiteSpace(searchString)) return true;
+
+        if (customer.FirstName.Contains(searchString, StringComparison.OrdinalIgnoreCase)
+            || customer.LastName.Contains(searchString, StringComparison.OrdinalIgnoreCase)
+            || customer.PhoneNumber.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        return false;
+    }
+}
