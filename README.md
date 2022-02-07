@@ -1,4 +1,4 @@
-# DemoBlazor.WithGraphics
+# DemoBlazor.WithPaginationSearch
 
 ## Project Creation
 
